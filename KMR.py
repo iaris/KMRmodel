@@ -5,8 +5,9 @@ import matplotlib.pyplot as plt
 
 """
 遷移行列を作る関数を作成
+ここでは自分自身と対戦することも許している
 Nはプレイヤー数、ipsはプレイヤーが実験行動を取る確率
-pは「戦略1をとるプレイヤーがこの確率より大きければ戦略1が最適反応となる」確率
+pは「戦略1をとるプレイヤーの割合がこの確率より大きければ戦略1が最適反応となる」確率
 なおどちらの戦略をとるのも無差別な時は戦略1を取るとした
 """
 def pmat(N, ips, p):
@@ -20,14 +21,16 @@ def pmat(N, ips, p):
     for i in range(1,N):
         a, b = ips/2.0, ips/2.0
         
-        if (i/ float(N)) < p:
+        if (i/ float(N)) < p: #戦略0が最適反応となる
             a = (a + (1-ips))
-        else:
+        else:                 #戦略1が最適反応となる
             b = (b + (1-ips))
         
+        #戦略1をとるプレイヤーが減る確率、減る確率を計算
         dec = (i/ float(N)) * a
         inc = ((N-i)/ float(N)) * b
-                 
+        
+        #遷移行列にそれぞれの確率を代入
         P[i, i-1] = dec 
         P[i, i+1] = inc
         P[i, i]   = 1-(dec + inc)
@@ -63,12 +66,6 @@ if output == 1: #1(Xのヒストグラムを描く)
     plt.show()
     
 if output == 2: #2(定常分布の分析)
-    sd = []
-    for i in range(1, 101):
-        ips = 1.0/i
-        B = pmat(ips)
-        x = mc_compute_stationary(B)
-        sd.append(x)
-
-    ax.hist(sd)
-    plt.show()    
+    x=mc_compute_stationary(A)
+    ax.bar(range(players+1), x)
+    plt.show()
