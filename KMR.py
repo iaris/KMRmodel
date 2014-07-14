@@ -1,52 +1,54 @@
+# -*- coding: utf-8 -*-
+
 from discrete_rv import discreteRV
 from mc_tools import *
 import numpy as np
 import matplotlib.pyplot as plt
 
 """
-‘JˆÚs—ñ‚ðì‚éŠÖ”‚ðì¬
-‚±‚±‚Å‚ÍŽ©•ªŽ©g‚Æ‘Îí‚·‚é‚±‚Æ‚à‹–‚µ‚Ä‚¢‚é
-N‚ÍƒvƒŒƒCƒ„[”Aips‚ÍƒvƒŒƒCƒ„[‚ªŽÀŒ±s“®‚ðŽæ‚éŠm—¦
-p‚Íuí—ª1‚ð‚Æ‚éƒvƒŒƒCƒ„[‚ÌŠ„‡‚ª‚±‚ÌŠm—¦‚æ‚è‘å‚«‚¯‚ê‚Îí—ª1‚ªÅ“K”½‰ž‚Æ‚È‚évŠm—¦
-‚È‚¨‚Ç‚¿‚ç‚Ìí—ª‚ð‚Æ‚é‚Ì‚à–³·•Ê‚ÈŽž‚Íí—ª1‚ðŽæ‚é‚Æ‚µ‚½
+ï¿½Jï¿½Úsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öï¿½ï¿½ï¿½ï¿½ì¬
+ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ÍŽï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½Æ‘Îí‚·ï¿½é‚±ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
+Nï¿½Íƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Aipsï¿½Íƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½ï¿½
+pï¿½Íuï¿½í—ª1ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌŠï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌŠmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½å‚«ï¿½ï¿½ï¿½ï¿½ï¿½Îí—ª1ï¿½ï¿½ï¿½Å“Kï¿½ï¿½ï¿½ï¿½ï¿½Æ‚È‚ï¿½ï¿½vï¿½mï¿½ï¿½
+ï¿½È‚ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½Ìí—ªï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê‚ÈŽï¿½ï¿½Íí—ª1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½
 """
 def pmat(N, ips, p):
-    P = np.zeros((N+1, N+1)) #—ës—ñ‚ðì¬
-    P[0, 0] = 1 - (ips/2.0) #‘æ0sA‘æNs‚ÌÝ’è
+    P = np.zeros((N+1, N+1)) #ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ì¬
+    P[0, 0] = 1 - (ips/2.0) #ï¿½ï¿½0ï¿½sï¿½Aï¿½ï¿½Nï¿½sï¿½ÌÝ’ï¿½
     P[0, 1] = ips/2.0
     P[N,N-1] = ips/2.0
     P[N,N] = 1 - (ips/2.0)
     
-    #‘æ1s‚©‚ç‘æN-1s‚Ü‚Å‚ÌÝ’è
+    #ï¿½ï¿½1ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½N-1ï¿½sï¿½Ü‚Å‚ÌÝ’ï¿½
     for i in range(1,N):
         a, b = ips/2.0, ips/2.0
         
-        if (i/ float(N)) < p: #í—ª0‚ªÅ“K”½‰ž‚Æ‚È‚é
+        if (i/ float(N)) < p: #ï¿½í—ª0ï¿½ï¿½ï¿½Å“Kï¿½ï¿½ï¿½ï¿½ï¿½Æ‚È‚ï¿½
             a = (a + (1-ips))
-        else:                 #í—ª1‚ªÅ“K”½‰ž‚Æ‚È‚é
+        else:                 #ï¿½í—ª1ï¿½ï¿½ï¿½Å“Kï¿½ï¿½ï¿½ï¿½ï¿½Æ‚È‚ï¿½
             b = (b + (1-ips))
         
-        #í—ª1‚ð‚Æ‚éƒvƒŒƒCƒ„[‚ªŒ¸‚éŠm—¦AŒ¸‚éŠm—¦‚ðŒvŽZ
+        #ï¿½í—ª1ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½mï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Z
         dec = (i/ float(N)) * a
         inc = ((N-i)/ float(N)) * b
         
-        #‘JˆÚs—ñ‚É‚»‚ê‚¼‚ê‚ÌŠm—¦‚ð‘ã“ü
+        #ï¿½Jï¿½Úsï¿½ï¿½ï¿½É‚ï¿½ï¿½ê‚¼ï¿½ï¿½ï¿½ÌŠmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         P[i, i-1] = dec 
         P[i, i+1] = inc
         P[i, i]   = 1-(dec + inc)
         
     return P
 
-#ƒvƒŒƒCƒ„[”AƒÃ‚Ì’lAp‚Ì’l‚ðÝ’è
+#ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Aï¿½Ã‚Ì’lï¿½Apï¿½Ì’lï¿½ï¿½ï¿½Ý’ï¿½
 players = 20
 ipsilon = 0.25
 plob = 1.0/3.0
 
-#ŽÀÛ‚É‘JˆÚs—ñ‚ðì¬AƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“‚ð‚·‚é
+#ï¿½ï¿½ï¿½Û‚É‘Jï¿½Úsï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½Aï¿½Vï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 A = pmat(players , ipsilon , plob)
 y = mc_sample_path(A, 0, 10000) 
 
-def subplots(): #Ž²A–Ú·‚è‚ðÝ’è
+def subplots(): #ï¿½ï¿½ï¿½Aï¿½Úï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý’ï¿½
     fig, ax = plt.subplots()
     ax.set_title('KMRmodel')
     return (fig, ax)
@@ -54,18 +56,18 @@ fig, ax = subplots()
 
 output = 0 #0 or 1 or 2
 
-if output == 0: #0(X‚Ìƒvƒƒbƒg)
+if output == 0: #0(Xï¿½Ìƒvï¿½ï¿½ï¿½bï¿½g)
     ax.plot(y)
     ax.plot(y, label= str(players) + 'players,ipsilon=' + str(ipsilon))
     ax.legend(loc='lower right')
     plt.show()
 
-if output == 1: #1(X‚ÌƒqƒXƒgƒOƒ‰ƒ€‚ð•`‚­)
+if output == 1: #1(Xï¿½Ìƒqï¿½Xï¿½gï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½ï¿½)
     ax.hist(y, label= str(players) + 'players,ipsilon=' + str(ipsilon))
     ax.legend()
     plt.show()
     
-if output == 2: #2(’èí•ª•z‚Ì•ªÍ)
+if output == 2: #2(ï¿½ï¿½ï¿½í•ªï¿½zï¿½Ì•ï¿½ï¿½ï¿½)
     x=mc_compute_stationary(A)
     ax.bar(range(players+1), x)
     plt.show()
